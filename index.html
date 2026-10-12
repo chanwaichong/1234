@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>澳門小三常識大冒險 50關</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap');
+
+        :root {
+            --bg-warm: #FFFDF7;
+            --primary-blue: #0284C7;
+            --accent-amber: #F59E0B;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", "Heiti TC", sans-serif;
+            background-color: #FEF9EC;
+            background-image: radial-gradient(#FDE68A 1.5px, transparent 1.5px);
+            background-size: 26px 26px;
+            color: #1E293B;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .btn-3d {
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+            box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18);
+        }
+        .btn-3d:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+        }
+        .btn-3d:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .option-card {
+            transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-width: 4px;
+            box-shadow: 0 6px 0 rgba(15, 23, 42, 0.08);
+        }
+        .option-card:hover {
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            border-color: #0284C7 !important;
+            background-color: #E0F2FE !important;
+            box-shadow: 0 6px 0 #0284C7 !important;
+            transform: translateY(-2px);
+        }
+        .option-card.correct-state {
+            border-color: #16A34A !important;
+            background-color: #DCFCE7 !important;
+            box-shadow: 0 6px 0 #15803D !important;
+        }
+        .option-card.wrong-state {
+            border-color: #E11D48 !important;
+            background-color: #FFE4E6 !important;
+            box-shadow: 0 6px 0 #BE123C !important;
+        }
+
+        /* Tianzige (田字格) Handwriting Box */
+        .tianzige-wrap {
+            position: relative;
+            width: 195px;
+            height: 195px;
+            background-color: #FFFFFF;
+            border: 4px solid #DC2626;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(220, 38, 38, 0.14);
+            touch-action: none;
+        }
+        @media (min-width: 640px) {
+            .tianzige-wrap {
+                width: 225px;
+                height: 225px;
+            }
+        }
+        .tianzige-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(to right, transparent calc(50% - 1px), #FCA5A5 calc(50% - 1px), #FCA5A5 calc(50% + 1px), transparent calc(50% + 1px)),
+                linear-gradient(to bottom, transparent calc(50% - 1px), #FCA5A5 calc(50% - 1px), #FCA5A5 calc(50% + 1px), transparent calc(50% + 1px)),
+                linear-gradient(45deg, transparent calc(50% - 0.75px), rgba(252, 165, 165, 0.5) calc(50% - 0.75px), rgba(252, 165, 165, 0.5) calc(50% + 0.75px), transparent calc(50% + 0.75px)),
+                linear-gradient(-45deg, transparent calc(50% - 0.75px), rgba(252, 165, 165, 0.5) calc(50% - 0.75px), rgba(252, 165, 165, 0.5) calc(50% + 0.75px), transparent calc(50% + 0.75px));
+        }
+        .tianzige-ghost {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "KaiTi", "STKaiti", "BiauKai", "DFKai-SB", "Noto Sans TC", serif;
+            font-size: 140px;
+            font-weight: 700;
+            color: rgba(148, 163, 184, 0.30);
+            pointer-events: none;
+            line-height: 1;
+        }
+        @media (min-width: 640px) {
+            .tianzige-ghost {
+                font-size: 162px;
+            }
+        }
+        .tianzige-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Start Screen Overlay: Unlocks Browser Web Speech API & AudioContext reliably -->
+    <div id="startOverlay" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-amber-400 max-w-lg w-full p-6 sm:p-8 text-center shadow-2xl animate-pop">
+            <div class="w-24 h-24 mx-auto bg-amber-100 rounded-full border-4 border-amber-400 flex items-center justify-center text-5xl mb-4 shadow-inner">
+                🏫
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-800 mb-2">澳門小三常識大冒險</h1>
+            <p class="text-base sm:text-lg font-bold text-slate-600 mb-4 leading-relaxed">
+                全卷 50 關隨機挑戰・配圖清晰・真人感<span class="text-sky-600 font-black">粵語讀題與選項發音</span>・包含 5 關田字格寫字練習！
+            </p>
+            <div id="voiceDetectBox" class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3 mb-5 text-sm font-bold text-sky-900">
+                🔊 正在準備粵語發聲系統...
+            </div>
+            <button onclick="startGameAndUnlockAudio()" class="btn-3d w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-6 rounded-2xl text-xl sm:text-2xl border-2 border-emerald-800 flex items-center justify-center gap-3">
+                <span>🚀</span>
+                <span>點擊開始遊戲（啟動粵語發聲）</span>
+            </button>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b-4 border-amber-300 shadow-sm px-3 py-2.5">
+        <div class="max-w-5xl mx-auto flex flex-col gap-2">
+            <!-- Top Row -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-400 border-2 border-amber-600 flex items-center justify-center text-2xl shadow-sm">
+                        🌟
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-black text-slate-800 leading-tight">澳門小三常識 50關</h1>
+                        <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
+                            <span id="progressText">第 1 / 50 關</span>
+                            <span>•</span>
+                            <span id="completedText" class="text-emerald-700">已完成 0 關</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <div class="bg-amber-100 border-2 border-amber-400 px-3 py-1 rounded-2xl flex items-center gap-1 font-black text-amber-900 text-sm sm:text-base">
+                        <span>⭐</span>
+                        <span id="starScore">0</span>
+                    </div>
+
+                    <button onclick="openLevelDrawer()" class="btn-3d bg-sky-600 hover:bg-sky-700 text-white border-2 border-sky-800 font-black px-3 py-1.5 rounded-2xl text-xs sm:text-sm flex items-center gap-1">
+                        <span>📋</span>
+                        <span>50關總覽</span>
+                    </button>
+
+                    <button onclick="shuffleAndRestart()" class="btn-3d bg-rose-500 hover:bg-rose-600 text-white border-2 border-rose-700 font-black px-3 py-1.5 rounded-2xl text-xs sm:text-sm flex items-center gap-1" title="重新打亂全部50題順序">
+                        <span>🔀</span>
+                        <span>重新洗牌</span>
+                    </button>
+
+                    <button onclick="openVoiceModal()" class="btn-3d bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-800 font-black px-3 py-1.5 rounded-2xl text-xs sm:text-sm flex items-center gap-1">
+                        <span>🔊</span>
+                        <span class="hidden sm:inline">粵語設定</span>
+                    </button>
+
+                    <button onclick="openStudyModal()" class="btn-3d bg-purple-600 hover:bg-purple-700 text-white border-2 border-purple-800 font-black px-3 py-1.5 rounded-2xl text-xs sm:text-sm flex items-center gap-1">
+                        <span>📖</span>
+                        <span class="hidden sm:inline">溫習錦囊</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar & 5 Writing Level Shortcuts -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-amber-100">
+                <div class="w-full sm:w-48 bg-slate-200 h-3 rounded-full overflow-hidden border border-slate-300">
+                    <div id="progressBarFill" class="bg-gradient-to-r from-amber-400 to-emerald-500 h-full transition-all duration-300" style="width: 2%"></div>
+                </div>
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+                    <span class="text-xs font-black text-amber-900 shrink-0">✍️ 寫字關捷徑：</span>
+                    <div id="writeShortcutsBar" class="flex items-center gap-1.5"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl w-full mx-auto px-3 py-4 flex flex-col justify-between gap-4">
+        <!-- Main Card -->
+        <section class="bg-white rounded-3xl border-4 border-amber-300 shadow-xl p-4 sm:p-6 flex flex-col gap-4">
+            <!-- Mode Badge & Audio Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <span id="levelNumBadge" class="bg-amber-400 text-slate-900 font-black px-3.5 py-1 rounded-2xl text-sm sm:text-base border-2 border-amber-600">
+                        第 1 關
+                    </span>
+                    <span id="modeTypeBadge" class="bg-sky-100 text-sky-900 font-black px-3 py-1 rounded-2xl text-xs sm:text-sm border-2 border-sky-300">
+                        🎯 看圖四選一
+                    </span>
+                    <span id="difficultyStars" class="text-amber-500 font-black text-sm sm:text-base tracking-wider">★</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="readCurrentQuestion()" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-black px-4 py-2 rounded-2xl text-sm sm:text-base border-2 border-sky-700 flex items-center gap-1.5">
+                        <span>🔊</span>
+                        <span>粵語讀題</span>
+                    </button>
+                    <button onclick="readCurrentHint()" class="btn-3d bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-2 rounded-2xl text-sm sm:text-base border-2 border-amber-400 flex items-center gap-1">
+                        <span>💡</span>
+                        <span>提示</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Visual + Direct Question Text -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-amber-50/70 rounded-2xl p-4 border-2 border-amber-200">
+                <div class="md:col-span-5 flex justify-center">
+                    <div id="questionSvgBox" class="w-full max-w-[260px] h-44 sm:h-48 bg-white rounded-2xl border-4 border-amber-300 shadow-inner flex items-center justify-center p-2 overflow-hidden">
+                        <!-- High-contrast SVG inserted dynamically -->
+                    </div>
+                </div>
+                <div class="md:col-span-7 flex flex-col gap-2 text-left">
+                    <h2 id="questionTitleText" onclick="readCurrentQuestion()" class="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 leading-snug cursor-pointer hover:text-sky-700 transition-colors" title="點擊聽粵語讀題">
+                        題目載入中...
+                    </h2>
+                    <p id="questionSubInstruction" class="text-sm sm:text-base font-bold text-sky-800 bg-sky-100/80 self-start px-3 py-1 rounded-xl border border-sky-300">
+                        請點選正確答案，然後按下方「確定答案」。
+                    </p>
+                    <div id="hintBox" class="hidden mt-1 bg-amber-100 border-2 border-amber-400 rounded-xl p-2.5 text-sm sm:text-base font-bold text-amber-950"></div>
+                </div>
+            </div>
+
+            <!-- Dynamic Interactive Area (Cleaned completely on every render) -->
+            <div id="interactiveStage" class="min-h-[210px] flex flex-col justify-center"></div>
+
+            <!-- Feedback Banner (Hidden until answer submitted) -->
+            <div id="feedbackBanner" class="hidden rounded-2xl p-4 border-4 animate-pop"></div>
+
+            <!-- Bottom Navigation & Submit Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t-2 border-slate-100">
+                <button id="prevBtn" onclick="goPrevLevel()" class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-800 font-black px-5 py-3 rounded-2xl text-base sm:text-lg border-2 border-slate-400">
+                    ⬅️ 上一關
+                </button>
+
+                <div class="flex items-center gap-3 flex-1 sm:flex-initial justify-end">
+                    <button id="submitBtn" onclick="checkUserAnswer()" class="btn-3d flex-1 sm:flex-initial bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-black px-8 py-3.5 rounded-2xl text-lg sm:text-xl border-2 border-emerald-800">
+                        ✅ 確定答案
+                    </button>
+                    <button id="nextBtn" onclick="goNextLevel()" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-black px-6 py-3.5 rounded-2xl text-base sm:text-lg border-2 border-sky-700">
+                        下一關 ➡️
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 50-Level Overview Modal -->
+    <div id="levelDrawerModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl border-4 border-sky-500 max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-pop">
+            <div class="bg-sky-600 text-white p-4 flex items-center justify-between">
+                <h3 class="text-lg sm:text-xl font-black flex items-center gap-2">
+                    <span>📋</span>
+                    <span>50關隨機題目總覽（點擊可跳關）</span>
+                </h3>
+                <button onclick="closeLevelDrawer()" class="btn-3d bg-white text-sky-800 font-black px-3 py-1 rounded-xl border-2 border-sky-900">
+                    ✖ 關閉
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto grid grid-cols-5 sm:grid-cols-10 gap-2.5" id="levelGridContainer"></div>
+            <div class="p-3 bg-slate-50 border-t flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm font-bold text-slate-600">
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> 已完成</span>
+                    <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span> ✍️ 寫字關</span>
+                </div>
+                <button onclick="shuffleAndRestart(); closeLevelDrawer();" class="btn-3d bg-rose-500 text-white px-4 py-1.5 rounded-xl font-black">
+                    🔀 重新隨機洗牌全部 50 關
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cantonese Voice Settings Modal -->
+    <div id="voiceModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl border-4 border-emerald-500 max-w-lg w-full flex flex-col shadow-2xl overflow-hidden animate-pop">
+            <div class="bg-emerald-600 text-white p-4 flex items-center justify-between">
+                <h3 class="text-lg sm:text-xl font-black">🔊 粵語讀音設定與測試</h3>
+                <button onclick="closeVoiceModal()" class="btn-3d bg-white text-emerald-800 font-black px-3 py-1 rounded-xl border-2 border-emerald-900">
+                    ✖ 關閉
+                </button>
+            </div>
+            <div class="p-5 space-y-4 text-sm sm:text-base font-bold text-slate-700">
+                <div>
+                    <label class="block font-black text-slate-900 mb-1">1. 選擇系統粵語聲線（優先選用 zh-HK / 粵語）：</label>
+                    <select id="voiceSelect" onchange="selectVoiceByURI(this.value)" class="w-full p-3 rounded-xl border-2 border-slate-300 bg-slate-50 font-bold text-slate-800"></select>
+                    <p id="currentVoiceInfo" class="text-xs text-slate-500 mt-1"></p>
+                </div>
+
+                <div>
+                    <label class="block font-black text-slate-900 mb-1">2. 朗讀語速（照顧融合生聽覺理解）：</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="changeSpeechRate(0.8)" id="rateSlow" class="btn-3d py-2.5 rounded-xl border-2 border-slate-300 bg-white font-black">🐢 慢速 0.8x</button>
+                        <button onclick="changeSpeechRate(0.92)" id="rateNormal" class="btn-3d py-2.5 rounded-xl border-2 border-sky-600 bg-sky-600 text-white font-black">👍 適中 0.92x</button>
+                        <button onclick="changeSpeechRate(1.05)" id="rateFast" class="btn-3d py-2.5 rounded-xl border-2 border-slate-300 bg-white font-black">🐇 正常 1.05x</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between bg-sky-50 p-3 rounded-2xl border-2 border-sky-200">
+                    <span>進入新關卡時自動粵語讀題：</span>
+                    <button id="autoReadToggleBtn" onclick="toggleAutoRead()" class="btn-3d bg-emerald-600 text-white font-black px-4 py-1.5 rounded-xl border-2 border-emerald-800">
+                        開啟中
+                    </button>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="speakCantonese('你好！我而家幫你用廣東話讀出常識測驗題目，祝你攞一百分！')" class="btn-3d flex-1 bg-amber-400 hover:bg-amber-500 text-slate-900 font-black py-3 rounded-2xl border-2 border-amber-600">
+                        🔔 測試粵語發聲
+                    </button>
+                    <button onclick="closeVoiceModal()" class="btn-3d bg-slate-800 text-white font-black px-6 py-3 rounded-2xl">
+                        確定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Guide Modal (Full Exam Key Points) -->
+    <div id="studyModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl border-4 border-purple-500 max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-pop">
+            <div class="bg-purple-600 text-white p-4 flex items-center justify-between">
+                <h3 class="text-lg sm:text-xl font-black">📖 澳門小三常識大測(一) 溫習錦囊（點擊句子可聽粵語）</h3>
+                <button onclick="closeStudyModal()" class="btn-3d bg-white text-purple-800 font-black px-3 py-1 rounded-xl border-2 border-purple-900">
+                    ✖ 關閉
+                </button>
+            </div>
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-sm sm:text-base font-bold text-slate-800">
+                <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 space-y-2">
+                    <h4 class="font-black text-amber-900 text-lg">📌 一、填充題及寫字重點（點擊朗讀）</h4>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">1. 由於澳門的人口不斷增加，加上【土地】面積小，隨著【人口】增加，對房屋的需求更大。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">2. 政府積極【填海】、發展【離島】的方法來增闢建屋土地。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">3. 澳門學生接受由政府提供的【十五】年免費教育。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">4. 政府興建【社會房屋】、【經濟房屋】令居民能置業安居。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">5. 政府以【美化】街道、整建修復的措施改善舊區環境。</p>
+                </div>
+
+                <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-4 space-y-2">
+                    <h4 class="font-black text-sky-900 text-lg">📌 二、簡答題與選擇題重點</h4>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 澳門正規教育四個階段：幼兒教育、小學教育（6個年級）、初中教育、高中教育（合共15年免費教育）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 食物包裝標籤資料：食品名稱、生產日期、有效日期（保質期）、成分、淨重、生產商及產地等。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 澳門糧食最主要供應地：中國內地（若內地農作物失收會影響澳門食材供應）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 食品安全投訴及監管部門：市政署（負責抽驗食品、舉辦食安講座、巡查街市超市；不會去外地監察食品工廠生產線）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 逐漸減少的房屋類型：村屋。</p>
+                </div>
+
+                <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 space-y-2">
+                    <h4 class="font-black text-emerald-900 text-lg">📌 三、配對、分類與附加題重點</h4>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 場所特點：街市（環境較雜亂，地面濕滑）、中式酒樓（供應飯、小菜和點心）、超級市場（以售賣包裝食物為主、有貨架、購物籃及收銀機）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 房屋特點：大型私人樓宇（擁有私人會所）、唐樓（樓層較少，並且只有樓梯）、社會房屋（公共房屋的一種，租金較便宜）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 前往香港的交通工具：直升機、高速客船（馬車、澳門輕軌不可前往香港）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 澳門常見交通問題：車位不足（停車場P滿）、巴士班次不足、人車爭路（飛機班次不足不是澳門常見陸上交通問題）。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 食物來源地：蔬菜來自農田、雞隻禽畜來自農場、水果來自果園、魚類來自海洋。</p>
+                    <p onclick="speakCantonese(this.innerText)" class="cursor-pointer hover:text-sky-700">• 附加題：超市索取膠袋需付 1 元；澳門在 80 年代起興建經濟房屋；與橫琴合作建設「澳門新街坊」。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // 1. SVG ILLUSTRATION LIBRARY (Custom high-contrast vector drawings matching exam)
+        // ============================================================================
+        function getExamSvg(key) {
+            const svgs = {
+                // 市政署抽驗蔬菜
+                iam_veg: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#ECFEFF"/>
+                    <rect x="140" y="95" width="85" height="60" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="3"/>
+                    <circle cx="165" cy="88" r="16" fill="#22C55E"/><circle cx="188" cy="84" r="18" fill="#16A34A"/><circle cx="206" cy="92" r="14" fill="#4ADE80"/>
+                    <circle cx="85" cy="52" r="24" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="65" y="45" width="16" height="11" rx="2" fill="#FFF" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="88" y="45" width="16" height="11" rx="2" fill="#FFF" stroke="#1E293B" stroke-width="2.5"/>
+                    <line x1="81" y1="50" x2="88" y2="50" stroke="#1E293B" stroke-width="2.5"/>
+                    <path d="M52 155 L58 82 Q85 75 112 82 L118 155 Z" fill="#38BDF8" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="88" y="96" width="16" height="12" fill="#FFF" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="70" y="112" width="44" height="40" rx="4" fill="#FFF" stroke="#0284C7" stroke-width="2.5"/>
+                    <circle cx="92" cy="100" r="9" fill="#22C55E"/>
+                    <text x="120" y="24" text-anchor="middle" font-size="14" font-weight="900" fill="#0369A1">市政署抽樣檢驗蔬菜</text>
+                </svg>`,
+
+                // 市政署食品安全講座
+                iam_talk: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0FDF4"/>
+                    <rect x="95" y="18" width="125" height="68" rx="6" fill="#FFFFFF" stroke="#15803D" stroke-width="4"/>
+                    <text x="157" y="48" text-anchor="middle" font-size="14" font-weight="900" fill="#166534">食品安全講座</text>
+                    <text x="157" y="68" text-anchor="middle" font-size="11" font-weight="700" fill="#15803D">市政署宣傳教育</text>
+                    <circle cx="52" cy="48" r="16" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="36" y="66" width="32" height="45" rx="6" fill="#38BDF8" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="110" cy="135" r="15" fill="#FDBA74" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="155" cy="135" r="15" fill="#FDE047" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="200" cy="135" r="15" fill="#A7F3D0" stroke="#1E293B" stroke-width="2.5"/>
+                </svg>`,
+
+                // 市政署巡查街市雞蛋及食米
+                iam_check: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFFBEB"/>
+                    <rect x="20" y="102" width="75" height="48" rx="6" fill="#FDE68A" stroke="#B45309" stroke-width="3"/>
+                    <ellipse cx="38" cy="98" rx="8" ry="10" fill="#FFF" stroke="#92400E" stroke-width="2"/>
+                    <ellipse cx="56" cy="98" rx="8" ry="10" fill="#FFF" stroke="#92400E" stroke-width="2"/>
+                    <ellipse cx="74" cy="98" rx="8" ry="10" fill="#FFF" stroke="#92400E" stroke-width="2"/>
+                    <circle cx="150" cy="52" r="22" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M122 155 L128 80 L175 80 L182 155 Z" fill="#60A5FA" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="102" y="75" width="32" height="42" rx="4" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M110 95 L116 102 L127 88" fill="none" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round"/>
+                    <text x="120" y="24" text-anchor="middle" font-size="14" font-weight="900" fill="#B45309">市政署人員巡查食品店</text>
+                </svg>`,
+
+                // 工廠自動生產線 (非市政署工作)
+                factory_line: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F1F5F9"/>
+                    <rect x="20" y="30" width="95" height="75" rx="6" fill="#CBD5E1" stroke="#334155" stroke-width="3"/>
+                    <line x1="15" y1="115" x2="185" y2="115" stroke="#1E293B" stroke-width="6"/>
+                    <rect x="28" y="88" width="22" height="26" rx="3" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="62" y="88" width="22" height="26" rx="3" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="96" y="88" width="22" height="26" rx="3" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+                    <circle cx="185" cy="70" r="20" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="168" y="93" width="34" height="52" rx="6" fill="#94A3B8" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="135" y="92" width="24" height="15" rx="3" fill="#EF4444" stroke="#1E293B" stroke-width="2"/>
+                    <text x="120" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#334155">外地食品工廠自動生產線</text>
+                </svg>`,
+
+                // 馬車
+                carriage: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FEF3C7"/>
+                    <path d="M125 60 Q165 45 205 60 L200 112 L130 112 Z" fill="#D97706" stroke="#1E293B" stroke-width="3"/>
+                    <circle cx="145" cy="122" r="20" fill="#FEF08A" stroke="#1E293B" stroke-width="4"/>
+                    <circle cx="192" cy="122" r="20" fill="#FEF08A" stroke="#1E293B" stroke-width="4"/>
+                    <ellipse cx="72" cy="96" rx="30" ry="18" fill="#92400E" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M52 88 L40 55 L26 62 L38 92 Z" fill="#92400E" stroke="#1E293B" stroke-width="3"/>
+                    <line x1="52" y1="112" x2="52" y2="142" stroke="#1E293B" stroke-width="4"/>
+                    <line x1="88" y1="112" x2="88" y2="142" stroke="#1E293B" stroke-width="4"/>
+                    <line x1="75" y1="92" x2="140" y2="92" stroke="#1E293B" stroke-width="3"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#92400E">馬車</text>
+                </svg>`,
+
+                // 直升機
+                helicopter: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#E0F2FE"/>
+                    <line x1="35" y1="38" x2="185" y2="38" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="110" y1="38" x2="110" y2="58" stroke="#1E293B" stroke-width="5"/>
+                    <ellipse cx="105" cy="88" rx="52" ry="28" fill="#38BDF8" stroke="#1E293B" stroke-width="3.5"/>
+                    <path d="M155 86 L210 74 L215 60" fill="none" stroke="#1E293B" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="215" cy="60" r="12" fill="none" stroke="#0284C7" stroke-width="3"/>
+                    <rect x="72" y="72" width="24" height="18" rx="4" fill="#E0F2FE" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="104" y="72" width="24" height="18" rx="4" fill="#E0F2FE" stroke="#1E293B" stroke-width="2.5"/>
+                    <line x1="70" y1="126" x2="140" y2="126" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+                    <text x="120" y="155" text-anchor="middle" font-size="16" font-weight="900" fill="#0369A1">直升機（可往返港澳）</text>
+                </svg>`,
+
+                // 輕軌 Ocean Cruiser
+                lrt: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0FDF4"/>
+                    <line x1="15" y1="142" x2="225" y2="112" stroke="#475569" stroke-width="6"/>
+                    <path d="M40 52 L195 42 L205 108 L35 128 Z" fill="#FFFFFF" stroke="#15803D" stroke-width="4"/>
+                    <rect x="50" y="62" width="60" height="36" rx="6" fill="#BAE6FD" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="124" y="56" width="32" height="40" rx="4" fill="#BAE6FD" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="164" y="54" width="28" height="38" rx="4" fill="#BAE6FD" stroke="#1E293B" stroke-width="2.5"/>
+                    <path d="M40 108 L202 92" stroke="#22C55E" stroke-width="6"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#166534">澳門輕軌 (Ocean Cruiser)</text>
+                </svg>`,
+
+                // 高速客船
+                ferry: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#E0F2FE"/>
+                    <path d="M30 118 L210 118 L190 88 L50 88 Z" fill="#EF4444" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M55 88 L175 88 L160 64 L70 64 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+                    <line x1="120" y1="38" x2="120" y2="64" stroke="#1E293B" stroke-width="3.5"/>
+                    <path d="M15 132 Q45 120 75 132 T135 132 T195 132 T230 132" fill="none" stroke="#0284C7" stroke-width="5"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#0369A1">高速客船（噴射船往香港）</text>
+                </svg>`,
+
+                // 飛機班次不足
+                airplane: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F1F5F9"/>
+                    <ellipse cx="130" cy="72" rx="75" ry="18" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M180 62 L205 32 L212 32 L198 66 Z" fill="#38BDF8" stroke="#1E293B" stroke-width="2.5"/>
+                    <path d="M105 74 L145 102 L162 102 L132 74 Z" fill="#94A3B8" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="35" y="118" width="28" height="22" fill="#FDE68A" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="70" y="118" width="28" height="22" fill="#FDE68A" stroke="#1E293B" stroke-width="2"/>
+                    <rect x="105" y="118" width="28" height="22" fill="#FDE68A" stroke="#1E293B" stroke-width="2"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="15" font-weight="900" fill="#334155">機場飛機與貨物</text>
+                </svg>`,
+
+                // 車位不足 P滿
+                parking_full: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFF1F2"/>
+                    <rect x="22" y="34" width="46" height="46" rx="8" fill="#2563EB" stroke="#1E293B" stroke-width="3"/>
+                    <text x="45" y="68" text-anchor="middle" font-size="30" font-weight="900" fill="#FFFFFF">P</text>
+                    <rect x="22" y="86" width="46" height="44" rx="8" fill="#EF4444" stroke="#1E293B" stroke-width="3"/>
+                    <text x="45" y="116" text-anchor="middle" font-size="24" font-weight="900" fill="#FFFFFF">滿</text>
+                    <rect x="82" y="96" width="120" height="14" rx="4" fill="#FACC15" stroke="#1E293B" stroke-width="3"/>
+                    <ellipse cx="142" cy="72" rx="38" ry="20" fill="#38BDF8" stroke="#1E293B" stroke-width="3"/>
+                    <text x="145" y="148" text-anchor="middle" font-size="16" font-weight="900" fill="#BE123C">停車場「P 滿」車位不足</text>
+                </svg>`,
+
+                // 307巴士班次不足
+                bus_wait: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFFBEB"/>
+                    <circle cx="192" cy="44" r="22" fill="#FFFFFF" stroke="#1E293B" stroke-width="3.5"/>
+                    <text x="192" y="50" text-anchor="middle" font-size="16" font-weight="900" fill="#DC2626">307</text>
+                    <line x1="192" y1="66" x2="192" y2="145" stroke="#1E293B" stroke-width="5"/>
+                    <circle cx="52" cy="66" r="15" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="38" y="84" width="28" height="52" rx="5" fill="#60A5FA" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="98" cy="70" r="15" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="84" y="88" width="28" height="48" rx="5" fill="#F472B6" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="142" cy="72" r="15" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="128" y="90" width="28" height="46" rx="5" fill="#34D399" stroke="#1E293B" stroke-width="2.5"/>
+                    <text x="105" y="25" text-anchor="middle" font-size="15" font-weight="900" fill="#B45309">巴士站大排長龍（班次不足）</text>
+                </svg>`,
+
+                // 人車爭路
+                jaywalk: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FEF2F2"/>
+                    <rect x="20" y="65" width="72" height="38" rx="10" fill="#F87171" stroke="#1E293B" stroke-width="3"/>
+                    <circle cx="38" cy="105" r="10" fill="#1E293B"/><circle cx="76" cy="105" r="10" fill="#1E293B"/>
+                    <rect x="148" y="78" width="74" height="40" rx="10" fill="#60A5FA" stroke="#1E293B" stroke-width="3"/>
+                    <circle cx="166" cy="120" r="10" fill="#1E293B"/><circle cx="204" cy="120" r="10" fill="#1E293B"/>
+                    <circle cx="118" cy="70" r="14" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M118 84 L118 118 L102 140 M118 118 L135 138 M102 98 L135 92" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#DC2626">馬路上人車爭路（危險！）</text>
+                </svg>`,
+
+                // 超級市場貨架
+                super_shelf: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0F9FF"/>
+                    <rect x="22" y="28" width="110" height="122" rx="4" fill="#FFFFFF" stroke="#0284C7" stroke-width="3.5"/>
+                    <line x1="22" y1="68" x2="132" y2="68" stroke="#0284C7" stroke-width="3"/>
+                    <line x1="22" y1="108" x2="132" y2="108" stroke="#0284C7" stroke-width="3"/>
+                    <rect x="32" y="40" width="16" height="24" fill="#F97316"/><rect x="56" y="40" width="16" height="24" fill="#22C55E"/><rect x="80" y="40" width="16" height="24" fill="#EF4444"/><rect x="104" y="40" width="16" height="24" fill="#3B82F6"/>
+                    <rect x="34" y="78" width="20" height="26" rx="4" fill="#EAB308"/><rect x="64" y="78" width="20" height="26" rx="4" fill="#A855F7"/><rect x="94" y="78" width="20" height="26" rx="4" fill="#EC4899"/>
+                    <circle cx="182" cy="68" r="18" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="166" y="90" width="32" height="55" rx="6" fill="#38BDF8" stroke="#1E293B" stroke-width="3"/>
+                    <text x="178" y="25" text-anchor="middle" font-size="13" font-weight="900" fill="#0369A1">整齊貨架選購包裝食物</text>
+                </svg>`,
+
+                // 超市收銀排隊
+                super_cashier: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0FDF4"/>
+                    <rect x="152" y="92" width="68" height="56" rx="6" fill="#CBD5E1" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="165" y="64" width="36" height="28" rx="4" fill="#1E293B"/>
+                    <text x="183" y="82" text-anchor="middle" font-size="11" font-weight="900" fill="#4ADE80">$25</text>
+                    <circle cx="45" cy="76" r="14" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="33" y="94" width="24" height="48" rx="5" fill="#FB923C" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="92" cy="74" r="14" fill="#FDE68A" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="80" y="92" width="24" height="50" rx="5" fill="#60A5FA" stroke="#1E293B" stroke-width="2.5"/>
+                    <text x="115" y="26" text-anchor="middle" font-size="15" font-weight="900" fill="#15803D">排隊到收銀處付款</text>
+                </svg>`,
+
+                // 超市購物籃與手推車
+                super_basket: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#EFF6FF"/>
+                    <path d="M35 88 L110 88 L98 138 L47 138 Z" fill="#38BDF8" stroke="#1E293B" stroke-width="3.5"/>
+                    <path d="M52 88 Q72 52 92 88" fill="none" stroke="#1E293B" stroke-width="4"/>
+                    <path d="M138 68 L212 68 L198 116 L148 116 Z" fill="#FDE047" stroke="#1E293B" stroke-width="3.5"/>
+                    <circle cx="156" cy="132" r="10" fill="#1E293B"/><circle cx="192" cy="132" r="10" fill="#1E293B"/>
+                    <text x="120" y="28" text-anchor="middle" font-size="16" font-weight="900" fill="#1D4ED8">購物籃與購物手推車</text>
+                </svg>`,
+
+                // 街市環境 (魚檔肉檔、地面濕滑)
+                wet_market: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFF7ED"/>
+                    <polygon points="45,42 75,42 88,54 32,54" fill="#F97316" stroke="#1E293B" stroke-width="2.5"/>
+                    <polygon points="155,42 185,42 198,54 142,54" fill="#F97316" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="24" y="102" width="192" height="42" fill="#FED7AA" stroke="#9A3412" stroke-width="3"/>
+                    <ellipse cx="72" cy="92" rx="22" ry="9" fill="#38BDF8" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="148" y="76" width="26" height="22" rx="4" fill="#EF4444" stroke="#1E293B" stroke-width="2.5"/>
+                    <ellipse cx="95" cy="156" rx="26" ry="6" fill="#7DD3FC"/>
+                    <ellipse cx="165" cy="158" rx="22" ry="5" fill="#7DD3FC"/>
+                    <text x="120" y="25" text-anchor="middle" font-size="15" font-weight="900" fill="#9A3412">傳統街市（鮮魚鮮肉檔・地面濕滑）</text>
+                </svg>`,
+
+                // 的士 TAXI
+                taxi: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FEFCE8"/>
+                    <rect x="92" y="36" width="56" height="22" rx="5" fill="#FACC15" stroke="#1E293B" stroke-width="3"/>
+                    <text x="120" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#1E293B">TAXI</text>
+                    <path d="M55 92 L78 58 L162 58 L185 92 Z" fill="#1E293B" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="35" y="90" width="170" height="40" rx="14" fill="#1E293B" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="74" y="64" width="40" height="24" rx="4" fill="#E0F2FE"/>
+                    <rect x="124" y="64" width="40" height="24" rx="4" fill="#E0F2FE"/>
+                    <circle cx="70" cy="132" r="18" fill="#475569" stroke="#1E293B" stroke-width="4"/>
+                    <circle cx="170" cy="132" r="18" fill="#475569" stroke="#1E293B" stroke-width="4"/>
+                </svg>`,
+
+                // 纜車
+                cable_car: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#E0F2FE"/>
+                    <line x1="15" y1="22" x2="225" y2="58" stroke="#1E293B" stroke-width="4"/>
+                    <line x1="120" y1="40" x2="120" y2="68" stroke="#1E293B" stroke-width="5"/>
+                    <rect x="76" y="68" width="88" height="74" rx="22" fill="#EF4444" stroke="#1E293B" stroke-width="3.5"/>
+                    <rect x="90" y="82" width="26" height="30" rx="5" fill="#E0F2FE" stroke="#1E293B" stroke-width="2.5"/>
+                    <rect x="124" y="82" width="26" height="30" rx="5" fill="#E0F2FE" stroke="#1E293B" stroke-width="2.5"/>
+                </svg>`,
+
+                // 私家車
+                private_car: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0F9FF"/>
+                    <path d="M58 88 L82 54 L158 54 L182 88 Z" fill="#3B82F6" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="36" y="86" width="168" height="40" rx="14" fill="#3B82F6" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="80" y="60" width="35" height="24" rx="4" fill="#E0F2FE"/>
+                    <rect x="122" y="60" width="35" height="24" rx="4" fill="#E0F2FE"/>
+                    <circle cx="72" cy="128" r="18" fill="#334155" stroke="#1E293B" stroke-width="4"/>
+                    <circle cx="168" cy="128" r="18" fill="#334155" stroke="#1E293B" stroke-width="4"/>
+                </svg>`,
+
+                // 蔬菜 (農田)
+                food_veg: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F0FDF4"/>
+                    <path d="M65 135 L50 68 L90 68 Z" fill="#F97316" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M62 68 L52 44 M70 68 L70 40 M78 68 L88 44" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                    <ellipse cx="162" cy="108" rx="28" ry="24" fill="#DCFCE7" stroke="#15803D" stroke-width="3"/>
+                    <circle cx="150" cy="68" r="20" fill="#22C55E"/><circle cx="174" cy="68" r="20" fill="#16A34A"/>
+                    <text x="120" y="25" text-anchor="middle" font-size="16" font-weight="900" fill="#166534">新鮮蔬菜（紅蘿蔔與白菜）</text>
+                </svg>`,
+
+                // 雞與豬 (農場)
+                food_farm: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FEFCE8"/>
+                    <ellipse cx="122" cy="102" rx="40" ry="30" fill="#FACC15" stroke="#1E293B" stroke-width="3"/>
+                    <circle cx="90" cy="76" r="20" fill="#FACC15" stroke="#1E293B" stroke-width="3"/>
+                    <polygon points="64,76 74,70 74,82" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+                    <path d="M84 56 Q90 42 98 56" fill="#EF4444" stroke="#1E293B" stroke-width="2.5"/>
+                    <line x1="112" y1="132" x2="112" y2="150" stroke="#D97706" stroke-width="4"/>
+                    <line x1="134" y1="132" x2="134" y2="150" stroke="#D97706" stroke-width="4"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#B45309">家禽與牲畜（雞隻）</text>
+                </svg>`,
+
+                // 水果 (果園)
+                food_fruit: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFF1F2"/>
+                    <circle cx="82" cy="98" r="32" fill="#EF4444" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M82 66 Q92 50 104 58" fill="none" stroke="#15803D" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="158" cy="102" r="30" fill="#F97316" stroke="#1E293B" stroke-width="3"/>
+                    <path d="M158 72 Q168 56 178 64" fill="none" stroke="#15803D" stroke-width="4" stroke-linecap="round"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#BE123C">新鮮水果（蘋果與鮮橙）</text>
+                </svg>`,
+
+                // 鮮魚 (海洋)
+                food_fish: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#E0F2FE"/>
+                    <ellipse cx="110" cy="92" rx="56" ry="30" fill="#38BDF8" stroke="#1E293B" stroke-width="3.5"/>
+                    <polygon points="166,92 204,64 204,120" fill="#0284C7" stroke="#1E293B" stroke-width="3.5"/>
+                    <circle cx="76" cy="84" r="6" fill="#1E293B"/>
+                    <path d="M98 62 Q120 42 140 62" fill="#0284C7" stroke="#1E293B" stroke-width="3"/>
+                    <text x="120" y="26" text-anchor="middle" font-size="16" font-weight="900" fill="#0369A1">新鮮海魚</text>
+                </svg>`,
+
+                // 澳門土地與填海
+                macau_land: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#E0F2FE"/>
+                    <path d="M15 130 Q60 118 105 130 T195 130 T235 130 L240 170 L0 170 Z" fill="#38BDF8"/>
+                    <rect x="42" y="54" width="32" height="72" fill="#FDE68A" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="82" y="38" width="36" height="88" fill="#FCA5A5" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="126" y="62" width="55" height="64" fill="#A7F3D0" stroke="#1E293B" stroke-width="3"/>
+                    <text x="120" y="24" text-anchor="middle" font-size="15" font-weight="900" fill="#0369A1">澳門人多地少・填海與發展離島</text>
+                </svg>`,
+
+                // 澳門15年免費教育
+                edu_15: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#F3E8FF"/>
+                    <rect x="28" y="36" width="184" height="98" rx="16" fill="#FFFFFF" stroke="#7E22CE" stroke-width="4"/>
+                    <text x="120" y="76" text-anchor="middle" font-size="24" font-weight="900" fill="#6B21A8">15年免費教育</text>
+                    <text x="120" y="108" text-anchor="middle" font-size="14" font-weight="900" fill="#9333EA">幼兒 ➔ 小學(6年) ➔ 初中 ➔ 高中</text>
+                </svg>`,
+
+                // 房屋類型 (社屋、經屋、唐樓、私人樓宇)
+                housing: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#ECFDF5"/>
+                    <rect x="26" y="34" width="46" height="112" rx="4" fill="#60A5FA" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="86" y="46" width="46" height="100" rx="4" fill="#34D399" stroke="#1E293B" stroke-width="3"/>
+                    <rect x="148" y="82" width="64" height="64" rx="4" fill="#FBBF24" stroke="#1E293B" stroke-width="3"/>
+                    <text x="49" y="24" text-anchor="middle" font-size="12" font-weight="900" fill="#1E3A8A">私人大廈</text>
+                    <text x="109" y="24" text-anchor="middle" font-size="12" font-weight="900" fill="#065F46">社屋/經屋</text>
+                    <text x="180" y="72" text-anchor="middle" font-size="12" font-weight="900" fill="#92400E">唐樓/舊區</text>
+                </svg>`,
+
+                // 食品標籤
+                food_label: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FFFBEB"/>
+                    <rect x="36" y="20" width="168" height="130" rx="12" fill="#FFFFFF" stroke="#D97706" stroke-width="3.5"/>
+                    <text x="120" y="45" text-anchor="middle" font-size="15" font-weight="900" fill="#B45309">📋 食物包裝標籤</text>
+                    <text x="52" y="72" font-size="13" font-weight="800" fill="#1E293B">• 食品名稱：純牛奶</text>
+                    <text x="52" y="94" font-size="13" font-weight="800" fill="#1E293B">• 成分：生牛乳</text>
+                    <text x="52" y="116" font-size="13" font-weight="800" fill="#1E293B">• 生產及有效日期</text>
+                    <text x="52" y="138" font-size="13" font-weight="800" fill="#1E293B">• 淨重及生產商資料</text>
+                </svg>`,
+
+                // 中式酒樓
+                restaurant: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#FEF2F2"/>
+                    <circle cx="120" cy="112" r="52" fill="#FCA5A5" stroke="#991B1B" stroke-width="3.5"/>
+                    <ellipse cx="98" cy="100" rx="20" ry="12" fill="#FEF08A" stroke="#1E293B" stroke-width="2.5"/>
+                    <ellipse cx="142" cy="100" rx="20" ry="12" fill="#BBF7D0" stroke="#1E293B" stroke-width="2.5"/>
+                    <circle cx="120" cy="126" r="14" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.5"/>
+                    <text x="120" y="28" text-anchor="middle" font-size="16" font-weight="900" fill="#991B1B">🏮 中式酒樓（飯、小菜和點心）</text>
+                </svg>`,
+
+                // 膠袋收費1元 / 橫琴新街坊
+                extra_topic: `<svg viewBox="0 0 240 170" class="w-full h-full">
+                    <rect width="240" height="170" rx="16" fill="#ECFDF5"/>
+                    <path d="M45 62 L105 62 L112 138 L38 138 Z" fill="#FFFFFF" stroke="#059669" stroke-width="3.5"/>
+                    <path d="M58 62 Q75 36 92 62" fill="none" stroke="#059669" stroke-width="3.5"/>
+                    <text x="75" y="108" text-anchor="middle" font-size="22" font-weight="900" fill="#059669">$1元</text>
+                    <rect x="132" y="54" width="82" height="84" rx="10" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="3"/>
+                    <text x="173" y="88" text-anchor="middle" font-size="14" font-weight="900" fill="#1E40AF">橫琴</text>
+                    <text x="173" y="112" text-anchor="middle" font-size="13" font-weight="900" fill="#1E40AF">澳門新街坊</text>
+                </svg>`
+            };
+            return svgs[key] || svgs.macau_land;
+        }
+
+        // ============================================================================
+        // 2. COMPLETE 50 LEVELS DATA BANK (100% Exam-Aligned, Direct Questions, 5 Types)
+        // ============================================================================
+        const MASTER_LEVELS = [
+            // --- 5 HANDWRITING LEVELS (田字格寫字關：土地、人口、填海、離島、美化) ---
+            {
+                id: 'W1',
+                type: 'write',
+                word: '土地',
+                jyutping: 'tou2 dei6',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '請在田字格內寫出「土地」兩個字。',
+                sentence: '由於澳門的人口不斷增加，加上【土地】面積小，對房屋的需求更大。',
+                hint: '先寫左邊「土」，再寫右邊「地」。可按「讀詞語」聽發音。'
+            },
+            {
+                id: 'W2',
+                type: 'write',
+                word: '人口',
+                jyutping: 'jan4 hau2',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '請在田字格內寫出「人口」兩個字。',
+                sentence: '隨著澳門【人口】不斷增加，對房屋的需求更大。',
+                hint: '「人」字兩畫，「口」字三畫，非常簡單！'
+            },
+            {
+                id: 'W3',
+                type: 'write',
+                word: '填海',
+                jyutping: 'tin4 hoi2',
+                difficulty: 2,
+                svg: 'macau_land',
+                question: '請在田字格內寫出「填海」兩個字。',
+                sentence: '政府積極【填海】、發展離島的方法來增闢建屋土地。',
+                hint: '「填」是提土旁，「海」是三點水旁。'
+            },
+            {
+                id: 'W4',
+                type: 'write',
+                word: '離島',
+                jyutping: 'lei4 dou2',
+                difficulty: 2,
+                svg: 'macau_land',
+                question: '請在田字格內寫出「離島」兩個字。',
+                sentence: '政府積極填海、發展【離島】的方法來增闢建屋土地。',
+                hint: '氹仔和路環都屬於澳門的「離島」。'
+            },
+            {
+                id: 'W5',
+                type: 'write',
+                word: '美化',
+                jyutping: 'mei5 faa3',
+                difficulty: 1,
+                svg: 'housing',
+                question: '請在田字格內寫出「美化」兩個字。',
+                sentence: '政府以【美化】街道、整建修復的措施改善舊區環境。',
+                hint: '「美」上面是羊字頭，下面是大字；右邊寫「化」字。'
+            },
+
+            // --- 10 FILL-IN-THE-BLANK SENTENCE LEVELS (對應測驗卷第一部分填充題) ---
+            {
+                id: 'B1',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '由於澳門的人口不斷增加，加上（ ＿＿＿ ）面積小，對房屋的需求更大。',
+                answer: '土地',
+                options: ['土地', '海洋', '森林', '沙漠'],
+                hint: '澳門面積小，不夠地方起樓，所以是「土地」面積小。'
+            },
+            {
+                id: 'B2',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '由於澳門的土地面積小，隨著（ ＿＿＿ ）增加，對房屋的需求更大。',
+                answer: '人口',
+                options: ['人口', '動物', '樹木', '單車'],
+                hint: '住在澳門的人越來越多，即是「人口」增加。'
+            },
+            {
+                id: 'B3',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '政府積極（ ＿＿＿ ）、發展離島的方法來增闢建屋土地。',
+                answer: '填海',
+                options: ['填海', '砍樹', '挖洞', '養魚'],
+                hint: '把淺海填平變成陸地的方法叫做「填海」。'
+            },
+            {
+                id: 'B4',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '政府積極填海、發展（ ＿＿＿ ）的方法來增闢建屋土地。',
+                answer: '離島',
+                options: ['離島', '外國', '太空', '海底'],
+                hint: '除了澳門半島，政府還積極發展氹仔和路環等「離島」。'
+            },
+            {
+                id: 'B5',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'edu_15',
+                question: '澳門學生接受由政府提供的（ ＿＿＿ ）年免費教育。',
+                answer: '十五',
+                options: ['十五', '十二', '九', '六'],
+                hint: '幼兒3年 + 小學6年 + 初中3年 + 高中3年 = 十五年。'
+            },
+            {
+                id: 'B6',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'housing',
+                question: '政府興建（ ＿＿＿＿ ）、經濟房屋令居民能置業安居。',
+                answer: '社會房屋',
+                options: ['社會房屋', '豪華別墅', '度假酒店', '大型商場'],
+                hint: '政府興建的兩種公共房屋是「社會房屋」和「經濟房屋」。'
+            },
+            {
+                id: 'B7',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'housing',
+                question: '政府興建社會房屋、（ ＿＿＿＿ ）令居民能置業安居。',
+                answer: '經濟房屋',
+                options: ['經濟房屋', '私人會所', '主題公園', '超級市場'],
+                hint: '政府協助居民購買安居的公共房屋是「經濟房屋」。'
+            },
+            {
+                id: 'B8',
+                type: 'blank',
+                difficulty: 1,
+                svg: 'housing',
+                question: '政府以（ ＿＿＿ ）街道、整建修復的措施改善舊區環境。',
+                answer: '美化',
+                options: ['美化', '破壞', '封閉', '弄髒'],
+                hint: '讓舊區街道變得更漂亮整潔，叫做「美化」街道。'
+            },
+            {
+                id: 'B9',
+                type: 'blank',
+                difficulty: 2,
+                svg: 'extra_topic',
+                question: '到超級市場購物時，顧客如果向店員索取膠袋，每個需付（ ＿＿＿ ）。',
+                answer: '1 元',
+                options: ['1 元', '5 角', '2 元', '10 元'],
+                hint: '根據澳門《限制提供塑膠袋》法律，每個膠袋收費 1 元。'
+            },
+            {
+                id: 'B10',
+                type: 'blank',
+                difficulty: 2,
+                svg: 'extra_topic',
+                question: '澳門政府與（ ＿＿＿ ）合作，建設包括養老、教育、居住等「澳門新街坊」項目。',
+                answer: '橫琴',
+                options: ['橫琴', '香港', '深圳', '北京'],
+                hint: '「澳門新街坊」位於與澳門相鄰的「橫琴」。'
+            },
+
+            // --- 8 MULTI-SELECT LEVELS (對應測驗卷看圖多選題及簡答題) ---
+            {
+                id: 'M1',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'iam_veg',
+                question: '以下哪些是市政署轄下部門保障食物安全的工作？（請選出 3 項）',
+                options: [
+                    { text: '抽樣檢驗蔬菜及食品', correct: true },
+                    { text: '舉辦食品安全講座', correct: true },
+                    { text: '派員巡查售賣食品的店舖', correct: true },
+                    { text: '在工廠操作機器包裝零食', correct: false }
+                ],
+                hint: '市政署負責抽驗蔬菜、舉辦食安講座和巡查店舖，不會在工廠開機器生產零食。'
+            },
+            {
+                id: 'M2',
+                type: 'multi',
+                difficulty: 1,
+                svg: 'ferry',
+                question: '我們可以乘搭以下哪些交通工具前往香港？（請選出 2 項）',
+                options: [
+                    { text: '直升機', correct: true },
+                    { text: '高速客船（噴射船）', correct: true },
+                    { text: '馬車', correct: false },
+                    { text: '澳門輕軌', correct: false }
+                ],
+                hint: '去香港要跨海，可以搭「直升機」或「高速客船」。'
+            },
+            {
+                id: 'M3',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'parking_full',
+                question: '以下哪些是澳門常見的交通問題？（請選出 3 項）',
+                options: [
+                    { text: '車位不足（停車場爆滿）', correct: true },
+                    { text: '巴士班次不足（候車人多）', correct: true },
+                    { text: '人車爭路', correct: true },
+                    { text: '飛機班次不足', correct: false }
+                ],
+                hint: '車位不足、巴士班次不足、人車爭路都是澳門常見的道路交通問題。'
+            },
+            {
+                id: 'M4',
+                type: 'multi',
+                difficulty: 1,
+                svg: 'super_shelf',
+                question: '以下哪些是超級市場的環境特點？（請選出 3 項）',
+                options: [
+                    { text: '貨架整齊排列包裝商品', correct: true },
+                    { text: '顧客排隊在收銀機前付款', correct: true },
+                    { text: '提供購物籃和購物手推車', correct: true },
+                    { text: '地面濕滑並現場宰殺鮮魚鮮肉', correct: false }
+                ],
+                hint: '超級市場有貨架、收銀機、購物籃和手推車。'
+            },
+            {
+                id: 'M5',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'edu_15',
+                question: '澳門正規教育包含以下哪四個階段？（請選出全部 4 項）',
+                options: [
+                    { text: '幼兒教育', correct: true },
+                    { text: '小學教育', correct: true },
+                    { text: '初中教育', correct: true },
+                    { text: '高中教育', correct: true }
+                ],
+                hint: '澳門正規教育四個階段：幼兒教育、小學教育、初中教育、高中教育，全部都正確！'
+            },
+            {
+                id: 'M6',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'food_label',
+                question: '食物包裝上的標籤通常提供了哪些資料？（請選出 3 項）',
+                options: [
+                    { text: '食品名稱及成分', correct: true },
+                    { text: '有效日期（保質期）及生產日期', correct: true },
+                    { text: '生產商名稱、產地及淨重', correct: true },
+                    { text: '收銀員的名字和電話', correct: false }
+                ],
+                hint: '食物標籤上有名稱、成分、有效日期、淨重和生產商，不會印收銀員名字。'
+            },
+            {
+                id: 'M7',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'macau_land',
+                question: '澳門政府用以下哪兩個主要方法來增闢建屋土地？（請選出 2 項）',
+                options: [
+                    { text: '積極填海', correct: true },
+                    { text: '發展離島', correct: true },
+                    { text: '減少免費教育年數', correct: false },
+                    { text: '關閉所有街市', correct: false }
+                ],
+                hint: '政府積極「填海」和「發展離島」來增加建屋土地。'
+            },
+            {
+                id: 'M8',
+                type: 'multi',
+                difficulty: 2,
+                svg: 'housing',
+                question: '澳門政府興建哪兩種公共房屋，令居民能置業安居？（請選出 2 項）',
+                options: [
+                    { text: '社會房屋', correct: true },
+                    { text: '經濟房屋', correct: true },
+                    { text: '傳統村屋', correct: false },
+                    { text: '豪華私人會所', correct: false }
+                ],
+                hint: '政府興建的是「社會房屋」和「經濟房屋」。'
+            },
+
+            // --- 12 TRUE / FALSE LEVELS (對應測驗卷判斷題及看圖是非題) ---
+            {
+                id: 'TF1',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'macau_land',
+                question: '澳門面積大，人口減少，對房屋需求少。',
+                answer: false,
+                hint: '想一想：澳門面積其實很小，而且人口不斷增加，對房屋需求很大！'
+            },
+            {
+                id: 'TF2',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'airplane',
+                question: '政府推出以「私人飛機優先」為核心的交通政策。',
+                answer: false,
+                hint: '澳門政府推行的是「公交優先」（公共巴士和輕軌優先），不是私人飛機優先！'
+            },
+            {
+                id: 'TF3',
+                type: 'tf',
+                difficulty: 3,
+                svg: 'factory_line',
+                question: '市政署轄下部門負責監察外地食品工場，以保障食物安全。',
+                answer: false,
+                hint: '小心陷阱！市政署負責監管及抽驗「澳門本地」進口及售賣的食品，不會去管轄外地的食品工場。'
+            },
+            {
+                id: 'TF4',
+                type: 'tf',
+                difficulty: 3,
+                svg: 'edu_15',
+                question: '在澳門，由小學到高中三年級的適齡學生均可享有免費教育。',
+                answer: false,
+                hint: '小心測驗卷陷阱！澳門15年免費教育是由「幼兒教育」開始到高中三年級，題目漏了幼兒教育，所以不正確！'
+            },
+            {
+                id: 'TF5',
+                type: 'tf',
+                difficulty: 2,
+                svg: 'food_veg',
+                question: '中國內地農作物失收會影響澳門的食材供應。',
+                answer: true,
+                hint: '因為中國內地是澳門糧食的最主要供應地，所以內地失收會影響澳門食材供應。'
+            },
+            {
+                id: 'TF6',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'iam_veg',
+                question: '圖中市政署人員抽樣檢驗蔬菜，是保障食物安全的工作。',
+                answer: true,
+                hint: '抽樣檢驗蔬菜可以確保市民買到安全的食材，是市政署的工作。'
+            },
+            {
+                id: 'TF7',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'iam_talk',
+                question: '圖中市政署舉辦食品安全講座，是保障食物安全的工作。',
+                answer: true,
+                hint: '教育市民認識食品安全知識，屬於市政署保障食物安全的工作。'
+            },
+            {
+                id: 'TF8',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'iam_check',
+                question: '圖中市政署人員到店舖巡查雞蛋和食米，是保障食物安全的工作。',
+                answer: true,
+                hint: '巡查市面售賣食品的地方，屬於市政署保障食安的工作。'
+            },
+            {
+                id: 'TF9',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'carriage',
+                question: '我們可以乘搭圖中的「馬車」由澳門前往香港。',
+                answer: false,
+                hint: '澳門與香港隔著大海，不能乘搭馬車去香港。'
+            },
+            {
+                id: 'TF10',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'helicopter',
+                question: '我們可以乘搭圖中的「直升機」由澳門前往香港。',
+                answer: true,
+                hint: '外港碼頭有空中快線直升機往返澳門與香港。'
+            },
+            {
+                id: 'TF11',
+                type: 'tf',
+                difficulty: 2,
+                svg: 'lrt',
+                question: '我們可以乘搭圖中的「澳門輕軌」直接前往香港。',
+                answer: false,
+                hint: '澳門輕軌只在澳門境內行駛，不能開去香港。'
+            },
+            {
+                id: 'TF12',
+                type: 'tf',
+                difficulty: 1,
+                svg: 'ferry',
+                question: '我們可以乘搭圖中的「高速客船」由澳門前往香港。',
+                answer: true,
+                hint: '高速客船（噴射船/金光飛航）是往返港澳的主要海上交通工具。'
+            },
+
+            // --- 15 MULTIPLE CHOICE LEVELS (對應測驗卷選擇題、配對題、看圖配對題、附加題) ---
+            {
+                id: 'C1',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'food_veg',
+                question: '以下哪個地方是澳門糧食的最主要供應地？',
+                answer: '中國內地。',
+                options: ['美國。', '中國內地。', '泰國。', '日本。'],
+                hint: '澳門毗鄰祖國，每日新鮮蔬菜、肉類和糧食最主要來自「中國內地」。'
+            },
+            {
+                id: 'C2',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'iam_check',
+                question: '發現售賣食品的地方有問題時，消費者可以向以下哪個政府部門投訴？',
+                answer: '市政署。',
+                options: ['旅遊局。', '衞生局。', '市政署。', '治安警察局。'],
+                hint: '負責食品安全監管和街市、食店巡查的部門是「市政署」。'
+            },
+            {
+                id: 'C3',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'housing',
+                question: '在澳門，以下哪種類型的房屋逐漸減少？',
+                answer: '村屋。',
+                options: ['社會房屋。', '村屋。', '經濟房屋。', '私人大廈。'],
+                hint: '隨著城市發展，舊式的矮層「村屋」已經越來越少。'
+            },
+            {
+                id: 'C4',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'edu_15',
+                question: '澳門的小學教育有多少個年級？',
+                answer: '六個。',
+                options: ['兩個。', '六個。', '三個。', '一個。'],
+                hint: '小學一年級至小學六年級，合共有「六個」年級。'
+            },
+            {
+                id: 'C5',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'wet_market',
+                question: '「環境較雜亂，地面濕滑」是以下哪個場所的特點？',
+                answer: '街市',
+                options: ['街市', '中式酒樓', '超級市場', '圖書館'],
+                hint: '因為有魚檔和肉檔經常沖水，所以「街市」地面較濕滑。'
+            },
+            {
+                id: 'C6',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'restaurant',
+                question: '「供應飯、小菜和點心」是以下哪個場所的特點？',
+                answer: '中式酒樓',
+                options: ['中式酒樓', '街市', '超級市場', '服裝店'],
+                hint: '全家人去飲茶食點心、食小菜的地方是「中式酒樓」。'
+            },
+            {
+                id: 'C7',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'super_shelf',
+                question: '「以售賣包裝食物為主」是以下哪個場所的特點？',
+                answer: '超級市場',
+                options: ['超級市場', '街市', '中式酒樓', '公園'],
+                hint: '貨架上擺滿盒裝、罐裝和袋裝食品的是「超級市場」。'
+            },
+            {
+                id: 'C8',
+                type: 'choice',
+                difficulty: 2,
+                svg: 'housing',
+                question: '「擁有私人會所」是以下哪種房屋的特點？',
+                answer: '大型私人樓宇',
+                options: ['大型私人樓宇', '唐樓', '社會房屋', '村屋'],
+                hint: '設有泳池、健身室等私人會所的是「大型私人樓宇」。'
+            },
+            {
+                id: 'C9',
+                type: 'choice',
+                difficulty: 2,
+                svg: 'housing',
+                question: '「樓層較少，並且只有樓梯」是以下哪種房屋的特點？',
+                answer: '唐樓',
+                options: ['唐樓', '大型私人樓宇', '社會房屋', '經濟房屋'],
+                hint: '舊區沒有升降機（電梯）、只有樓梯而且樓層較少的是「唐樓」。'
+            },
+            {
+                id: 'C10',
+                type: 'choice',
+                difficulty: 2,
+                svg: 'housing',
+                question: '「是公共房屋的一種，租金較便宜」是以下哪種房屋的特點？',
+                answer: '社會房屋',
+                options: ['社會房屋', '唐樓', '大型私人樓宇', '村屋'],
+                hint: '政府出租給有需要家庭、租金較便宜的公屋叫做「社會房屋」。'
+            },
+            {
+                id: 'C11',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'taxi',
+                question: '看圖配對：車頂有「TAXI」標誌的是甚麼陸上交通工具？',
+                answer: '的士',
+                options: ['的士', '纜車', '輕軌', '私家車'],
+                hint: 'TAXI 的中文名稱是「的士」（計程車）。'
+            },
+            {
+                id: 'C12',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'cable_car',
+                question: '看圖配對：懸掛在纜索上運行（例如松山纜車）的是甚麼交通工具？',
+                answer: '纜車',
+                options: ['纜車', '的士', '輕軌', '私家車'],
+                hint: '吊在半空鋼纜上行駛的是「纜車」。'
+            },
+            {
+                id: 'C13',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'food_veg',
+                question: '看圖配對：我們平時吃的紅蘿蔔和白菜等蔬菜，主要來自哪裏？',
+                answer: '農田',
+                options: ['農田', '果園', '農場', '海洋'],
+                hint: '農夫在「農田」裏種植蔬菜。'
+            },
+            {
+                id: 'C14',
+                type: 'choice',
+                difficulty: 1,
+                svg: 'food_fish',
+                question: '看圖配對：圖中的鮮魚主要來自哪裏？',
+                answer: '海洋',
+                options: ['海洋', '果園', '農場', '農田'],
+                hint: '海魚生活在廣闊的「海洋」裏。'
+            },
+            {
+                id: 'C15',
+                type: 'choice',
+                difficulty: 2,
+                svg: 'extra_topic',
+                question: '澳門在甚麼時候起開始興建經濟房屋？',
+                answer: '80 年代',
+                options: ['60 年代', '70 年代', '80 年代', '90 年代'],
+                hint: '測驗卷附加題重點：澳門在「80 年代」起開始興建經濟房屋。'
+            }
+        ];
+
+        // ============================================================================
+        // 3. CLEAN SINGLE-STATE MACHINE (Prevents any UI scramble or state leak)
+        // ============================================================================
+        const state = {
+            levels: [],              // Shuffled 50 levels
+            currentIndex: 0,         // Current level index (0 to 49)
+            completedIds: new Set(), // Completed level IDs
+            stars: 0,                // Total stars earned
+            locked: false,           // Prevents double submission after answering
+            selectedSingle: null,    // For 'choice', 'tf', 'blank'
+            selectedMulti: new Set(),// For 'multi'
+            showGhostChar: true,     // For 'write' level ghost character toggle
+            brushColor: '#1E293B',   // Current handwriting brush color
+            strokesCount: [0, 0],    // Stroke counter for the two Tianzige boxes
+            autoRead: true,          // Auto read question on level load
+            audioUnlocked: false,    // Browser audio unlock flag
+            speechRate: 0.92,        // Cantonese TTS speed
+            selectedVoiceURI: '',    // Selected Web Speech voice
+            voices: []               // Cached browser voices
+        };
+
+        // Pure Fisher-Yates shuffle (returns a new shuffled array without mutating original)
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Deep-clone and shuffle all 50 levels + their internal options
+        function buildShuffledLevels() {
+            const rawCopy = JSON.parse(JSON.stringify(MASTER_LEVELS));
+            rawCopy.forEach(lvl => {
+                if (lvl.type === 'choice' || lvl.type === 'blank') {
+                    lvl.options = shuffleArray(lvl.options);
+                } else if (lvl.type === 'multi') {
+                    lvl.options = shuffleArray(lvl.options);
+                }
+            });
+            return shuffleArray(rawCopy);
+        }
+
+        // ============================================================================
+        // 4. CANTONESE TTS & SOUND EFFECTS ENGINE (Stable, Anti-Freeze)
+        // ============================================================================
+        window._activeUtterance = null;
+        let speechTimeoutId = null;
+
+        function scoreCantoneseVoice(v) {
+            const lang = (v.lang || '').toLowerCase();
+            const name = (v.name || '').toLowerCase();
+            let score = 0;
+            if (lang.includes('yue') || lang === 'zh-hk' || lang === 'zh_hk' || lang === 'zh-mo') score += 100;
+            if (name.includes('cantonese') || name.includes('粵語') || name.includes('廣東話') || name.includes('香港') || name.includes('hong kong') || name.includes('sin-ji') || name.includes('hiugaai') || name.includes('hiumaan') || name.includes('wanlung')) {
+                score += 90;
+            }
+            if (lang.includes('zh-tw') || lang.includes('cmn-hant')) score += 30;
+            else if (lang.includes('zh')) score += 15;
+            return score;
+        }
+
+        function loadSystemVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const list = window.speechSynthesis.getVoices() || [];
+            if (!list.length) return;
+
+            state.voices = [...list].sort((a, b) => scoreCantoneseVoice(b) - scoreCantoneseVoice(a));
+            if (!state.selectedVoiceURI && state.voices.length > 0) {
+                state.selectedVoiceURI = state.voices[0].voiceURI;
+            }
+            updateVoiceUI();
+        }
+
+        function updateVoiceUI() {
+            const detectBox = document.getElementById('voiceDetectBox');
+            const selectEl = document.getElementById('voiceSelect');
+            const infoEl = document.getElementById('currentVoiceInfo');
+
+            const chosen = state.voices.find(v => v.voiceURI === state.selectedVoiceURI) || state.voices[0];
+            if (chosen && detectBox) {
+                const isCanton = scoreCantoneseVoice(chosen) >= 90;
+                detectBox.innerHTML = isCanton
+                    ? `🌟 已準備好粵語語音：<strong>${chosen.name}</strong>`
+                    : `🔊 已準備好語音：<strong>${chosen.name} (${chosen.lang})</strong>`;
+            }
+
+            if (selectEl) {
+                selectEl.innerHTML = '';
+                const zhList = state.voices.filter(v => scoreCantoneseVoice(v) >= 15);
+                const listToRender = zhList.length ? zhList : state.voices;
+                listToRender.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.voiceURI;
+                    const tag = scoreCantoneseVoice(v) >= 90 ? '🌟 [粵語] ' : '';
+                    opt.textContent = `${tag}${v.name} (${v.lang})`;
+                    if (v.voiceURI === state.selectedVoiceURI) opt.selected = true;
+                    selectEl.appendChild(opt);
+                });
+            }
+            if (infoEl && chosen) {
+                infoEl.textContent = `目前使用聲線：${chosen.name} (${chosen.lang})`;
+            }
+        }
+
+        function normalizeForCantoneseSpeech(rawText) {
+            if (!rawText) return '';
+            return String(rawText)
+                .replace(/（\s*＿+\s*）/g, '，空格，')
+                .replace(/＿+/g, '，空格，')
+                .replace(/[【】「」『』（）()]/g, ' ')
+                .replace(/✓|⭕/g, ' 正確 ')
+                .replace(/✗|❌/g, ' 不正確 ')
+                .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}]/gu, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function speakCantonese(text) {
+            const clean = normalizeForCantoneseSpeech(text);
+            if (!clean || !('speechSynthesis' in window)) return;
+
+            if (speechTimeoutId) {
+                clearTimeout(speechTimeoutId);
+                speechTimeoutId = null;
+            }
+
+            try {
+                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+
+                speechTimeoutId = setTimeout(() => {
+                    if (!state.voices.length) loadSystemVoices();
+                    const utter = new SpeechSynthesisUtterance(clean);
+                    window._activeUtterance = utter; // Prevent garbage collection cut-off
+
+                    const chosen = state.voices.find(v => v.voiceURI === state.selectedVoiceURI) || state.voices[0];
+                    if (chosen && scoreCantoneseVoice(chosen) >= 15) {
+                        utter.voice = chosen;
+                        utter.lang = chosen.lang || 'zh-HK';
+                    } else {
+                        utter.lang = 'zh-HK';
+                    }
+                    utter.rate = state.speechRate;
+                    utter.pitch = 1.02;
+                    utter.volume = 1.0;
+
+                    window.speechSynthesis.speak(utter);
+                }, 50);
+            } catch (err) {
+                console.warn('Speech synthesis warning:', err);
+            }
+        }
+
+        // Web Audio API pleasant sound effects
+        let audioCtx = null;
+        function playSoundEffect(type) {
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) audioCtx = new AudioContextClass();
+                }
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);       // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    osc.frequency.setValueAtTime(1046.5, now + 0.3); // C6
+                    gain.gain.setValueAtTime(0.16, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+                    osc.start(now);
+                    osc.stop(now + 0.55);
+                } else if (type === 'tryagain') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.setValueAtTime(240, now + 0.15);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                }
+            } catch (e) {}
+        }
+
+        // ============================================================================
+        // 5. LEVEL RENDERING ENGINE (Zero State Leakage)
+        // ============================================================================
+        function renderCurrentLevel() {
+            const lvl = state.levels[state.currentIndex];
+            if (!lvl) return;
+
+            // 1. Reset per-level interaction state completely
+            state.locked = false;
+            state.selectedSingle = null;
+            state.selectedMulti = new Set();
+            state.strokesCount = [0, 0];
+
+            // 2. Update top header & badges
+            document.getElementById('progressText').textContent = `第 ${state.currentIndex + 1} / ${state.levels.length} 關`;
+            document.getElementById('completedText').textContent = `已完成 ${state.completedIds.size} 關`;
+            document.getElementById('starScore').textContent = state.stars;
+            document.getElementById('progressBarFill').style.width = `${Math.max(2, ((state.currentIndex + 1) / state.levels.length) * 100)}%`;
+
+            const isDone = state.completedIds.has(lvl.id);
+            document.getElementById('levelNumBadge').textContent = `第 ${state.currentIndex + 1} 關 ${isDone ? '✅' : ''}`;
+
+            const modeNames = {
+                choice: '🎯 看圖四選一',
+                tf: '⭕❌ 看圖是非題',
+                blank: '🧩 句子填充題',
+                multi: '☑️ 多選判斷題',
+                write: '✍️ 田字格寫字練習'
+            };
+            document.getElementById('modeTypeBadge').textContent = modeNames[lvl.type] || '🎯 互動練習';
+            document.getElementById('difficultyStars').textContent = '★'.repeat(lvl.difficulty || 1);
+
+            // 3. Render SVG Illustration & Direct Question Text
+            document.getElementById('questionSvgBox').innerHTML = getExamSvg(lvl.svg);
+            document.getElementById('questionTitleText').textContent = lvl.question;
+
+            const subInst = document.getElementById('questionSubInstruction');
+            if (lvl.type === 'choice') {
+                subInst.textContent = '👆 請點選 1 個正確答案（點擊選項會自動讀出粵語），再按「確定答案」。';
+            } else if (lvl.type === 'tf') {
+                subInst.textContent = '👆 請判斷句子是否正確，點選「⭕ 正確」或「❌ 不正確」，再按「確定答案」。';
+            } else if (lvl.type === 'blank') {
+                subInst.textContent = '👆 請點選正確的詞語填入句子空格中，再按「確定答案」。';
+            } else if (lvl.type === 'multi') {
+                const correctCount = lvl.options.filter(o => o.correct).length;
+                subInst.textContent = `👆 這題有 ${correctCount} 個正確答案，請點選所有正確卡片，再按「確定答案」。`;
+            } else if (lvl.type === 'write') {
+                subInst.textContent = `✍️ 請在下方兩個田字格內寫出「${lvl.word}」（粵音：${lvl.jyutping}），寫好後按「完成寫字」。`;
+            }
+
+            // 4. Reset Hint & Feedback Banners
+            const hintBox = document.getElementById('hintBox');
+            hintBox.classList.add('hidden');
+            hintBox.textContent = '';
+
+            const feedbackBanner = document.getElementById('feedbackBanner');
+            feedbackBanner.classList.add('hidden');
+            feedbackBanner.innerHTML = '';
+
+            // 5. Update Bottom Buttons
+            document.getElementById('prevBtn').disabled = (state.currentIndex === 0);
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = lvl.type === 'write' ? '✅ 完成寫字' : '✅ 確定答案';
+
+            // 6. Clean Interactive Stage and Render Mode-Specific UI
+            const stage = document.getElementById('interactiveStage');
+            stage.innerHTML = '';
+
+            if (lvl.type === 'choice' || lvl.type === 'blank') {
+                renderChoiceOrBlankStage(lvl, stage);
+            } else if (lvl.type === 'tf') {
+                renderTrueFalseStage(lvl, stage);
+            } else if (lvl.type === 'multi') {
+                renderMultiSelectStage(lvl, stage);
+            } else if (lvl.type === 'write') {
+                renderHandwritingStage(lvl, stage);
+            }
+
+            // 7. Refresh 5 Writing Level Shortcuts
+            renderWriteShortcutsBar();
+
+            // 8. Auto-read question directly in Cantonese
+            if (state.autoRead && state.audioUnlocked) {
+                readCurrentQuestion();
+            }
+        }
+
+        // Mode 1 & 3: Choice (看圖四選一) & Blank (句子填充題)
+        function renderChoiceOrBlankStage(lvl, stage) {
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3.5';
+
+            const labels = ['A', 'B', 'C', 'D'];
+            lvl.options.forEach((optText, idx) => {
+                const card = document.createElement('div');
+                card.className = 'option-card bg-white border-slate-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer';
+                card.dataset.val = optText;
+
+                card.onclick = () => {
+                    if (state.locked) return;
+                    playSoundEffect('click');
+                    state.selectedSingle = optText;
+
+                    // Update visual selection
+                    grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected', 'wrong-state'));
+                    card.classList.add('selected');
+
+                    // If Blank mode, preview word inside question title
+                    if (lvl.type === 'blank') {
+                        document.getElementById('questionTitleText').textContent =
+                            lvl.question.replace(/（\s*＿+\s*）/, `（ ${optText} ）`);
+                    }
+
+                    speakCantonese(optText);
+                };
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 pr-2">
+                        <span class="w-10 h-10 rounded-xl bg-sky-100 border-2 border-sky-400 text-sky-900 font-black text-lg flex items-center justify-center shrink-0">
+                            ${labels[idx] || (idx + 1)}
+                        </span>
+                        <span class="text-lg sm:text-xl font-black text-slate-800">${optText}</span>
+                    </div>
+                    <button type="button" class="w-10 h-10 rounded-xl bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 flex items-center justify-center text-lg shrink-0" title="聽粵語讀音">
+                        🔊
+                    </button>
+                `;
+
+                // Separate audio button click so it reads without double triggering
+                const audioBtn = card.querySelector('button');
+                audioBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    speakCantonese(optText);
+                };
+
+                grid.appendChild(card);
+            });
+
+            stage.appendChild(grid);
+        }
+
+        // Mode 2: True / False (看圖是非題)
+        function renderTrueFalseStage(lvl, stage) {
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto w-full';
+
+            const choices = [
+                { val: true, label: '⭕ 正確（✓）', speak: '正確', bg: 'bg-emerald-50 border-emerald-300 text-emerald-900' },
+                { val: false, label: '❌ 不正確（✗）', speak: '不正確', bg: 'bg-rose-50 border-rose-300 text-rose-900' }
+            ];
+
+            choices.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `option-card ${item.bg} rounded-3xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer text-center`;
+                card.dataset.val = String(item.val);
+
+                card.onclick = () => {
+                    if (state.locked) return;
+                    playSoundEffect('click');
+                    state.selectedSingle = item.val;
+                    grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected', 'wrong-state'));
+                    card.classList.add('selected');
+                    speakCantonese(item.speak);
+                };
+
+                card.innerHTML = `
+                    <span class="text-2xl sm:text-3xl font-black">${item.label}</span>
+                    <span class="text-xs sm:text-sm font-bold opacity-75">點擊選擇並聽粵語</span>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            stage.appendChild(grid);
+        }
+
+        // Mode 4: Multi-Select (看圖多選題 / 簡答多選題)
+        function renderMultiSelectStage(lvl, stage) {
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3.5';
+
+            lvl.options.forEach((optObj, idx) => {
+                const card = document.createElement('div');
+                card.className = 'option-card bg-white border-slate-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer';
+                card.dataset.idx = idx;
+
+                const updateCardAppearance = () => {
+                    const checkIcon = card.querySelector('.multi-check-box');
+                    if (state.selectedMulti.has(idx)) {
+                        card.classList.add('selected');
+                        checkIcon.textContent = '✅';
+                        checkIcon.className = 'multi-check-box w-10 h-10 rounded-xl bg-sky-600 text-white font-black text-xl flex items-center justify-center shrink-0';
+                    } else {
+                        card.classList.remove('selected');
+                        checkIcon.textContent = '⬜';
+                        checkIcon.className = 'multi-check-box w-10 h-10 rounded-xl bg-slate-100 border-2 border-slate-300 text-slate-400 font-black text-xl flex items-center justify-center shrink-0';
+                    }
+                };
+
+                card.onclick = () => {
+                    if (state.locked) return;
+                    playSoundEffect('click');
+                    if (state.selectedMulti.has(idx)) {
+                        state.selectedMulti.delete(idx);
+                    } else {
+                        state.selectedMulti.add(idx);
+                    }
+                    card.classList.remove('wrong-state');
+                    updateCardAppearance();
+                    speakCantonese(optObj.text);
+                };
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 pr-2">
+                        <span class="multi-check-box w-10 h-10 rounded-xl bg-slate-100 border-2 border-slate-300 text-slate-400 font-black text-xl flex items-center justify-center shrink-0">⬜</span>
+                        <span class="text-base sm:text-lg font-black text-slate-800">${optObj.text}</span>
+                    </div>
+                    <button type="button" class="w-10 h-10 rounded-xl bg-amber-100 hover:bg-amber-200 border-2 border-amber-300 flex items-center justify-center text-lg shrink-0" title="聽粵語讀音">
+                        🔊
+                    </button>
+                `;
+
+                card.querySelector('button').onclick = (e) => {
+                    e.stopPropagation();
+                    speakCantonese(optObj.text);
+                };
+
+                grid.appendChild(card);
+            });
+
+            stage.appendChild(grid);
+        }
+
+        // Mode 5: Tianzige Handwriting Stage (田字格寫字關：土地、人口、填海、離島、美化)
+        function renderHandwritingStage(lvl, stage) {
+            const chars = Array.from(lvl.word);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex flex-col items-center gap-4';
+
+            // Top Word Banner + Audio Buttons
+            const wordBar = document.createElement('div');
+            wordBar.className = 'w-full bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2';
+            wordBar.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="bg-rose-600 text-white font-black px-3 py-1 rounded-xl text-base sm:text-lg">重點詞語：${lvl.word}</span>
+                    <span class="text-sm sm:text-base font-black text-slate-600">粵拼：${lvl.jyutping}</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" id="speakWordBtn" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-black px-3.5 py-1.5 rounded-xl text-sm border-2 border-sky-700">
+                        🔊 讀詞語「${lvl.word}」
+                    </button>
+                    <button type="button" id="speakSentBtn" class="btn-3d bg-purple-600 hover:bg-purple-700 text-white font-black px-3.5 py-1.5 rounded-xl text-sm border-2 border-purple-800">
+                        📖 讀測驗原句
+                    </button>
+                </div>
+            `;
+            wrapper.appendChild(wordBar);
+
+            wordBar.querySelector('#speakWordBtn').onclick = () => speakCantonese(lvl.word);
+            wordBar.querySelector('#speakSentBtn').onclick = () => speakCantonese(lvl.sentence);
+
+            // Sentence Context Display
+            const sentText = document.createElement('div');
+            sentText.className = 'text-base sm:text-lg font-black text-slate-700 bg-white px-4 py-2 rounded-xl border-2 border-slate-200 text-center';
+            sentText.textContent = lvl.sentence;
+            wrapper.appendChild(sentText);
+
+            // Two Tianzige Boxes
+            const boxesRow = document.createElement('div');
+            boxesRow.className = 'flex flex-wrap items-center justify-center gap-6 my-1';
+
+            chars.forEach((ch, idx) => {
+                const col = document.createElement('div');
+                col.className = 'flex flex-col items-center gap-2';
+
+                const tianzige = document.createElement('div');
+                tianzige.className = 'tianzige-wrap';
+                tianzige.innerHTML = `
+                    <div class="tianzige-lines"></div>
+                    <div class="tianzige-ghost" id="ghostChar_${idx}" style="opacity: ${state.showGhostChar ? '1' : '0'}">${ch}</div>
+                    <canvas class="tianzige-canvas" id="writeCanvas_${idx}" width="225" height="225"></canvas>
+                `;
+
+                const clearSingleBtn = document.createElement('button');
+                clearSingleBtn.type = 'button';
+                clearSingleBtn.className = 'btn-3d bg-slate-200 hover:bg-slate-300 text-slate-800 font-black px-3 py-1 rounded-xl text-xs sm:text-sm border border-slate-400';
+                clearSingleBtn.textContent = `🧹 重寫「${ch}」字`;
+                clearSingleBtn.onclick = () => clearHandwritingCanvas(idx);
+
+                col.appendChild(tianzige);
+                col.appendChild(clearSingleBtn);
+                boxesRow.appendChild(col);
+            });
+
+            wrapper.appendChild(boxesRow);
+
+            // Handwriting Controls (Ghost Toggle + Brush Colors + Clear All)
+            const toolsBar = document.createElement('div');
+            toolsBar.className = 'flex flex-wrap items-center justify-center gap-2 sm:gap-3';
+            toolsBar.innerHTML = `
+                <button type="button" id="toggleGhostBtn" class="btn-3d bg-amber-100 hover:bg-amber-200 text-amber-950 font-black px-3.5 py-2 rounded-xl text-xs sm:text-sm border-2 border-amber-400">
+                    👁️ 描紅底字：${state.showGhostChar ? '顯示中' : '已隱藏（默寫）'}
+                </button>
+                <div class="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-300">
+                    <span class="text-xs font-black text-slate-600">筆色：</span>
+                    <button type="button" data-color="#1E293B" class="color-dot w-7 h-7 rounded-full bg-slate-800 border-2 border-white shadow"></button>
+                    <button type="button" data-color="#0284C7" class="color-dot w-7 h-7 rounded-full bg-sky-600 border-2 border-white shadow"></button>
+                    <button type="button" data-color="#DC2626" class="color-dot w-7 h-7 rounded-full bg-red-600 border-2 border-white shadow"></button>
+                </div>
+                <button type="button" id="clearAllCanvasBtn" class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 font-black px-3.5 py-2 rounded-xl text-xs sm:text-sm border-2 border-rose-300">
+                    🗑️ 全部清除
+                </button>
+            `;
+            wrapper.appendChild(toolsBar);
+            stage.appendChild(wrapper);
+
+            // Bind Ghost Toggle
+            toolsBar.querySelector('#toggleGhostBtn').onclick = (e) => {
+                state.showGhostChar = !state.showGhostChar;
+                e.currentTarget.textContent = `👁️ 描紅底字：${state.showGhostChar ? '顯示中' : '已隱藏（默寫）'}`;
+                chars.forEach((_, idx) => {
+                    const g = document.getElementById(`ghostChar_${idx}`);
+                    if (g) g.style.opacity = state.showGhostChar ? '1' : '0';
+                });
+            };
+
+            // Bind Brush Color Buttons
+            toolsBar.querySelectorAll('.color-dot').forEach(btn => {
+                btn.onclick = () => {
+                    state.brushColor = btn.dataset.color;
+                    playSoundEffect('click');
+                };
+            });
+
+            // Bind Clear All
+            toolsBar.querySelector('#clearAllCanvasBtn').onclick = () => {
+                chars.forEach((_, idx) => clearHandwritingCanvas(idx));
+            };
+
+            // Initialize Canvas Drawing Events
+            chars.forEach((_, idx) => setupSingleHandwritingCanvas(idx));
+        }
+
+        function setupSingleHandwritingCanvas(idx) {
+            const canvas = document.getElementById(`writeCanvas_${idx}`);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            let drawing = false;
+            let lastX = 0;
+            let lastY = 0;
+
+            const getCoords = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                if (e.touches && e.touches.length > 0) {
+                    return {
+                        x: (e.touches[0].clientX - rect.left) * scaleX,
+                        y: (e.touches[0].clientY - rect.top) * scaleY
+                    };
+                }
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            };
+
+            const startDraw = (e) => {
+                if (state.locked) return;
+                e.preventDefault();
+                drawing = true;
+                const pos = getCoords(e);
+                lastX = pos.x;
+                lastY = pos.y;
+                state.strokesCount[idx] = (state.strokesCount[idx] || 0) + 1;
+
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, 4.5, 0, Math.PI * 2);
+                ctx.fillStyle = state.brushColor;
+                ctx.fill();
+            };
+
+            const moveDraw = (e) => {
+                if (!drawing || state.locked) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.strokeStyle = state.brushColor;
+                ctx.lineWidth = 10;
+                ctx.stroke();
+                lastX = pos.x;
+                lastY = pos.y;
+            };
+
+            const endDraw = (e) => {
+                if (!drawing) return;
+                e.preventDefault();
+                drawing = false;
+            };
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', moveDraw);
+            window.addEventListener('mouseup', endDraw);
+
+            canvas.addEventListener('touchstart', startDraw, { passive: false });
+            canvas.addEventListener('touchmove', moveDraw, { passive: false });
+            canvas.addEventListener('touchend', endDraw, { passive: false });
+        }
+
+        function clearHandwritingCanvas(idx) {
+            const canvas = document.getElementById(`writeCanvas_${idx}`);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            state.strokesCount[idx] = 0;
+            playSoundEffect('click');
+        }
+
+        // ============================================================================
+        // 6. ANSWER VERIFICATION & ENCOURAGING FEEDBACK
+        // ============================================================================
+        function checkUserAnswer() {
+            const lvl = state.levels[state.currentIndex];
+            if (!lvl || state.locked) return;
+
+            // Validate that student has made a selection or written strokes
+            if (lvl.type === 'choice' || lvl.type === 'blank' || lvl.type === 'tf') {
+                if (state.selectedSingle === null) {
+                    showFeedbackBanner(false, '請先點選一個答案，再按「確定答案」喔！');
+                    speakCantonese('請先點選一個答案！');
+                    return;
+                }
+            } else if (lvl.type === 'multi') {
+                if (state.selectedMulti.size === 0) {
+                    showFeedbackBanner(false, '請先點選正確的卡片，再按「確定答案」喔！');
+                    speakCantonese('請先點選正確嘅選項！');
+                    return;
+                }
+            } else if (lvl.type === 'write') {
+                if ((state.strokesCount[0] || 0) < 1 || (state.strokesCount[1] || 0) < 1) {
+                    showFeedbackBanner(false, `請在兩個田字格內都寫出「${lvl.word}」兩個字喔！`);
+                    speakCantonese(`請喺兩個田字格入面寫出${lvl.word}兩個字啦！`);
+                    return;
+                }
+            }
+
+            // Evaluate correctness
+            let isCorrect = false;
+            const stage = document.getElementById('interactiveStage');
+
+            if (lvl.type === 'choice' || lvl.type === 'blank') {
+                isCorrect = (state.selectedSingle === lvl.answer);
+                stage.querySelectorAll('.option-card').forEach(card => {
+                    if (card.dataset.val === lvl.answer && isCorrect) {
+                        card.classList.add('correct-state');
+                    } else if (card.dataset.val === state.selectedSingle && !isCorrect) {
+                        card.classList.add('wrong-state');
+                    }
+                });
+            } else if (lvl.type === 'tf') {
+                isCorrect = (state.selectedSingle === lvl.answer);
+                stage.querySelectorAll('.option-card').forEach(card => {
+                    if (card.dataset.val === String(state.selectedSingle)) {
+                        card.classList.add(isCorrect ? 'correct-state' : 'wrong-state');
+                    }
+                });
+            } else if (lvl.type === 'multi') {
+                const expectedIndices = lvl.options
+                    .map((o, i) => (o.correct ? i : -1))
+                    .filter(i => i !== -1);
+
+                isCorrect =
+                    state.selectedMulti.size === expectedIndices.length &&
+                    expectedIndices.every(i => state.selectedMulti.has(i));
+
+                if (isCorrect) {
+                    stage.querySelectorAll('.option-card').forEach(card => {
+                        const idx = Number(card.dataset.idx);
+                        if (state.selectedMulti.has(idx)) card.classList.add('correct-state');
+                    });
+                } else {
+                    stage.querySelectorAll('.option-card').forEach(card => {
+                        const idx = Number(card.dataset.idx);
+                        if (state.selectedMulti.has(idx) && !lvl.options[idx].correct) {
+                            card.classList.add('wrong-state');
+                        }
+                    });
+                }
+            } else if (lvl.type === 'write') {
+                isCorrect = true;
+            }
+
+            if (isCorrect) {
+                state.locked = true;
+                if (!state.completedIds.has(lvl.id)) {
+                    state.completedIds.add(lvl.id);
+                    state.stars += 1;
+                }
+                playSoundEffect('correct');
+
+                const praiseMsg = lvl.type === 'write'
+                    ? `🎉 寫得好靚呀！「${lvl.word}」已經牢牢記住了，獲得 1 顆星星 ⭐！`
+                    : `🎉 答對了！真聰明！獲得 1 顆星星 ⭐！`;
+
+                showFeedbackBanner(true, praiseMsg);
+                speakCantonese(lvl.type === 'write' ? `寫得好靚呀！${lvl.word}！` : '答啱咗！好叻呀！');
+
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('completedText').textContent = `已完成 ${state.completedIds.size} 關`;
+                document.getElementById('starScore').textContent = state.stars;
+                document.getElementById('levelNumBadge').textContent = `第 ${state.currentIndex + 1} 關 ✅`;
+                renderWriteShortcutsBar();
+            } else {
+                playSoundEffect('tryagain');
+                showFeedbackBanner(false, `💪 差一點點！小提示：${lvl.hint}（請再點選試一次！）`);
+                speakCantonese(`再試一次啦！提示：${lvl.hint}`);
+            }
+        }
+
+        function showFeedbackBanner(isSuccess, message) {
+            const banner = document.getElementById('feedbackBanner');
+            banner.classList.remove('hidden', 'bg-emerald-100', 'border-emerald-500', 'text-emerald-950', 'bg-rose-100', 'border-rose-400', 'text-rose-950');
+
+            if (isSuccess) {
+                banner.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-950');
+                banner.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-base sm:text-lg font-black">${message}</span>
+                        <button onclick="goNextLevel()" class="btn-3d bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2 rounded-xl text-sm sm:text-base border-2 border-emerald-800">
+                            下一關 ➡️
+                        </button>
+                    </div>
+                `;
+            } else {
+                banner.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-950');
+                banner.innerHTML = `<div class="text-base sm:text-lg font-black">${message}</div>`;
+            }
+        }
+
+        // ============================================================================
+        // 7. NAVIGATION, SHORTCUTS & MODALS
+        // ============================================================================
+        function readCurrentQuestion() {
+            const lvl = state.levels[state.currentIndex];
+            if (!lvl) return;
+            speakCantonese(lvl.question);
+        }
+
+        function readCurrentHint() {
+            const lvl = state.levels[state.currentIndex];
+            if (!lvl) return;
+            const hintBox = document.getElementById('hintBox');
+            hintBox.classList.remove('hidden');
+            hintBox.textContent = `💡 小提示：${lvl.hint}`;
+            speakCantonese(lvl.hint);
+        }
+
+        function goPrevLevel() {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderCurrentLevel();
+            }
+        }
+
+        function goNextLevel() {
+            if (state.currentIndex < state.levels.length - 1) {
+                state.currentIndex++;
+                renderCurrentLevel();
+            } else {
+                speakCantonese('恭喜你！已經完成全部五十關常識大冒險喇！');
+                openLevelDrawer();
+            }
+        }
+
+        function jumpToLevel(idx) {
+            if (idx >= 0 && idx < state.levels.length) {
+                state.currentIndex = idx;
+                renderCurrentLevel();
+            }
+        }
+
+        function renderWriteShortcutsBar() {
+            const bar = document.getElementById('writeShortcutsBar');
+            if (!bar) return;
+            bar.innerHTML = '';
+
+            state.levels.forEach((lvl, idx) => {
+                if (lvl.type === 'write') {
+                    const btn = document.createElement('button');
+                    const isCurrent = (idx === state.currentIndex);
+                    const isDone = state.completedIds.has(lvl.id);
+                    btn.className = `btn-3d px-2.5 py-1 rounded-xl text-xs font-black border-2 shrink-0 ${
+                        isCurrent
+                            ? 'bg-amber-400 text-slate-900 border-amber-700'
+                            : isDone
+                            ? 'bg-emerald-100 text-emerald-900 border-emerald-400'
+                            : 'bg-white text-slate-700 border-amber-300 hover:bg-amber-50'
+                    }`;
+                    btn.textContent = `${lvl.word}(第${idx + 1}關)${isDone ? '✓' : ''}`;
+                    btn.onclick = () => jumpToLevel(idx);
+                    bar.appendChild(btn);
+                }
+            });
+        }
+
+        function shuffleAndRestart() {
+            state.levels = buildShuffledLevels();
+            state.currentIndex = 0;
+            renderCurrentLevel();
+        }
+
+        function openLevelDrawer() {
+            const container = document.getElementById('levelGridContainer');
+            container.innerHTML = '';
+
+            state.levels.forEach((lvl, idx) => {
+                const isDone = state.completedIds.has(lvl.id);
+                const isWrite = (lvl.type === 'write');
+                const isCurrent = (idx === state.currentIndex);
+
+                const btn = document.createElement('button');
+                btn.className = `btn-3d p-2 rounded-2xl font-black text-xs sm:text-sm border-2 flex flex-col items-center justify-center gap-0.5 ${
+                    isCurrent
+                        ? 'ring-4 ring-sky-400 bg-sky-600 text-white border-sky-900'
+                        : isDone
+                        ? 'bg-emerald-500 text-white border-emerald-700'
+                        : isWrite
+                        ? 'bg-amber-300 text-slate-900 border-amber-600'
+                        : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-sky-50'
+                }`;
+                btn.innerHTML = `
+                    <span>第${idx + 1}關</span>
+                    <span class="text-[11px]">${isWrite ? `✍️${lvl.word}` : isDone ? '⭐完成' : '挑戰'}</span>
+                `;
+                btn.onclick = () => {
+                    closeLevelDrawer();
+                    jumpToLevel(idx);
+                };
+                container.appendChild(btn);
+            });
+
+            document.getElementById('levelDrawerModal').classList.remove('hidden');
+        }
+
+        function closeLevelDrawer() {
+            document.getElementById('levelDrawerModal').classList.add('hidden');
+        }
+
+        function openVoiceModal() {
+            loadSystemVoices();
+            document.getElementById('voiceModal').classList.remove('hidden');
+        }
+
+        function closeVoiceModal() {
+            document.getElementById('voiceModal').classList.add('hidden');
+        }
+
+        function selectVoiceByURI(uri) {
+            state.selectedVoiceURI = uri;
+            updateVoiceUI();
+            speakCantonese('廣東話讀題聲音已經設定好喇！');
+        }
+
+        function changeSpeechRate(rate) {
+            state.speechRate = rate;
+            const map = { 0.8: 'rateSlow', 0.92: 'rateNormal', 1.05: 'rateFast' };
+            Object.entries(map).forEach(([r, id]) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (Math.abs(Number(r) - rate) < 0.02) {
+                    el.className = 'btn-3d py-2.5 rounded-xl border-2 border-sky-600 bg-sky-600 text-white font-black';
+                } else {
+                    el.className = 'btn-3d py-2.5 rounded-xl border-2 border-slate-300 bg-white font-black';
+                }
+            });
+            speakCantonese('語速已經調整好喇！');
+        }
+
+        function toggleAutoRead() {
+            state.autoRead = !state.autoRead;
+            const btn = document.getElementById('autoReadToggleBtn');
+            if (state.autoRead) {
+                btn.textContent = '開啟中';
+                btn.className = 'btn-3d bg-emerald-600 text-white font-black px-4 py-1.5 rounded-xl border-2 border-emerald-800';
+            } else {
+                btn.textContent = '已關閉';
+                btn.className = 'btn-3d bg-slate-400 text-white font-black px-4 py-1.5 rounded-xl border-2 border-slate-600';
+            }
+        }
+
+        function openStudyModal() {
+            document.getElementById('studyModal').classList.remove('hidden');
+        }
+
+        function closeStudyModal() {
+            document.getElementById('studyModal').classList.add('hidden');
+        }
+
+        function startGameAndUnlockAudio() {
+            state.audioUnlocked = true;
+            document.getElementById('startOverlay').classList.add('hidden');
+            playSoundEffect('correct');
+            loadSystemVoices();
+            readCurrentQuestion();
+        }
+
+        // Pre-load voices and initialize shuffled 50 levels on startup
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadSystemVoices;
+        }
+
+        window.onload = function () {
+            loadSystemVoices();
+            state.levels = buildShuffledLevels();
+            renderCurrentLevel();
+        };
+    </script>
+</body>
+</html>
